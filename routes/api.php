@@ -1,6 +1,9 @@
 <?php
 
+use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\TaskController;
 use App\Http\Controllers\User\MeController;
+use App\Http\Controllers\WorksheetController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -21,4 +24,8 @@ use Illuminate\Support\Facades\Route;
 Auth::routes(['register'=>false]);
 
 Route::get('me', [MeController::class, 'getMe']);
+
+Route::apiResource('projects', ProjectController::class);
+Route::apiResource('tasks', TaskController::class);
+Route::apiResource('worksheets', WorksheetController::class);
 

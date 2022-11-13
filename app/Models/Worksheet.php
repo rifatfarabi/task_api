@@ -9,4 +9,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Worksheet extends Model
 {
     use HasFactory,SoftDeletes;
+
+    protected $fillable = [
+        'project_id',
+        'task_id',
+        'user_id',
+        'time',
+        'date',
+        'note'
+    ];
 }
