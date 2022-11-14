@@ -2,83 +2,60 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Worksheet\StoreWorksheetRequest;
+use App\Http\Requests\Worksheet\UpdateWorksheetRequest;
+use App\Http\Resources\Worksheet\WorksheetIndexResource;
+use App\Http\Resources\Worksheet\WorksheetShowResource;
+use App\Models\Worksheet;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class WorksheetController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    public function __construct()
+    {
+        $this->middleware("auth:sanctum");
+    }
+
     public function index()
     {
-        //
+        $worksheets = Worksheet::all();
+        return WorksheetIndexResource::collection($worksheets);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+
+    public function store(StoreWorksheetRequest $request)
     {
-        //
+        Worksheet::create($request->all());
+        return response([
+            "success" => true,
+            "message" => "Created Successfully"
+        ],Response::HTTP_CREATED);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+
+    public function show(Worksheet $worksheet)
     {
-        //
+        return new WorksheetShowResource($worksheet);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+
+
+    public function update(UpdateWorksheetRequest $request, Worksheet $worksheet)
     {
-        //
+        $worksheet->update($request->all());
+        return response([
+            "success" => true,
+            "message" => "Updated Successfully"
+        ],Response::HTTP_OK);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+    public function destroy(Worksheet $worksheet)
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        $worksheet->delete();
+        return response([
+            "success" => true,
+            "message" => "Deleted Successfully"
+        ],Response::HTTP_OK);
     }
 }

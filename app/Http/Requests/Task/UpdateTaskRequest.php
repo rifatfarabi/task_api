@@ -13,7 +13,7 @@ class UpdateTaskRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return $this->user();
     }
 
     /**
@@ -24,7 +24,13 @@ class UpdateTaskRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'project_id' => ['required'],
+            'user_id' => ['required'],
+            'description' => ['required'],
+            'start_date' => ['required'],
+            'close_date' => ['required'],
+            'is_complete' => ['required'],
+            'status' => ['required']
         ];
     }
 }

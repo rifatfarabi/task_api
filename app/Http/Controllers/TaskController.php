@@ -2,83 +2,59 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Task\StoreTaskRequest;
+use App\Http\Requests\Task\UpdateTaskRequest;
+use App\Http\Resources\Task\TaskIndexResource;
+use App\Http\Resources\Task\TaskShowResource;
+use App\Models\Task;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class TaskController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    public function __construct()
+    {
+        $this->middleware("auth:sanctum");
+    }
+
     public function index()
     {
-        //
+        $tasks = Task::all();
+        return TaskIndexResource::collection($tasks);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+
+    public function store(StoreTaskRequest $request)
     {
-        //
+        Task::create($request->all());
+        return response([
+            "success" => true,
+            "message" => "Created Successfully"
+        ],Response::HTTP_CREATED);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+
+    public function show(Task $task)
     {
-        //
+        return new TaskShowResource($task);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+
+    public function update(UpdateTaskRequest $request, Task $task)
     {
-        //
+        $task->update($request->all());
+        return response([
+            "success" => true,
+            "message" => "Updated Successfully"
+        ],Response::HTTP_OK);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+    public function destroy(Task $task)
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        $task->delete();
+        return response([
+            "success" => true,
+            "message" => "Deleted Successfully"
+        ],Response::HTTP_OK);
     }
 }

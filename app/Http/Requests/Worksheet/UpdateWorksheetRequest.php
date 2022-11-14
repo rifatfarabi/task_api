@@ -13,7 +13,7 @@ class UpdateWorksheetRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return $this->user();
     }
 
     /**
@@ -24,7 +24,12 @@ class UpdateWorksheetRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'project_id' => ['required'],
+            'task_id' => ['required'],
+            'user_id' => ['required'],
+            'time' => ['required'],
+            'date' => ['required'],
+            'note' => ['required']
         ];
     }
 }
